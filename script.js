@@ -21,7 +21,6 @@ function criarItemTarefa(tarefa) {
   `;
   tarefaList.appendChild(li);
 
-  // ... (seu código existente)
   const editButton = document.createElement("button");
   editButton.textContent = "Editar";
   editButton.classList.add("edit-button"); // Adicione uma classe para estilizar
@@ -30,17 +29,14 @@ function criarItemTarefa(tarefa) {
     const tituloSpan = li.querySelector(".tarefa-titulo");
     const descricaoP = li.querySelector("p");
 
-    // Crie inputs para edição
     const tituloInput = document.createElement("input");
     tituloInput.value = tituloSpan.textContent;
     const descricaoInput = document.createElement("textarea");
     descricaoInput.value = descricaoP.textContent;
 
-    // Substitua os elementos existentes pelos inputs
     tituloSpan.replaceWith(tituloInput);
     descricaoP.replaceWith(descricaoInput);
 
-    // Adicione um botão "Salvar"
     const saveButton = document.createElement("button");
     saveButton.textContent = "Salvar";
     saveButton.classList.add("save-button");
@@ -49,7 +45,6 @@ function criarItemTarefa(tarefa) {
       const newDescricao = descricaoInput.value;
       const tarefaId = li.dataset.id;
 
-      // Envie uma requisição PUT para atualizar a tarefa
       fetch(`/tarefas/${tarefaId}`, {
         method: "PUT",
         headers: {
@@ -59,7 +54,6 @@ function criarItemTarefa(tarefa) {
       })
         .then((response) => response.json())
         .then((data) => {
-          // Atualize o DOM com os novos dados
           tituloSpan.textContent = newTitulo;
           descricaoP.textContent = newDescricao;
         })
@@ -67,7 +61,6 @@ function criarItemTarefa(tarefa) {
           console.error("Erro ao atualizar tarefa:", error);
         });
 
-      // Remova os inputs e o botão "Salvar"
       tituloInput.remove();
       descricaoInput.remove();
       saveButton.remove();
@@ -80,11 +73,10 @@ function criarItemTarefa(tarefa) {
 }
 
 tarefaForm.addEventListener("submit", async (event) => {
-  event.preventDefault(); // Evita que o formulário seja recarregado
-
+  event.preventDefault();
   const novaTarefa = {
     titulo: tituloInput.value,
-    descricao: "", // Assuma descrição vazia por enquanto
+    descricao: "",
   };
 
   const conexao = new Conexao();
