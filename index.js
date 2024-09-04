@@ -21,8 +21,7 @@ app.get("/", async (req, res) => {
   try {
     const lista = await novaTarefa.getTodasTarefas();
     const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0); // Reseta horas, minutos, segundos e milissegundos
-
+    hoje.setHours(0, 0, 0, 0);
     const listaFormatada = lista.map((tarefa) => {
       const prazo = tarefa.prazo ? new Date(tarefa.prazo) : null;
       const dataFormatada = prazo ? formatarData(prazo) : "Indefinido";
@@ -42,7 +41,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-// Criação
+// criação
 app.post("/tarefas", async (req, res) => {
   const { titulo, descricao, prazo } = req.body;
   try {
@@ -54,7 +53,7 @@ app.post("/tarefas", async (req, res) => {
   }
 });
 
-// Atualizar
+// att
 app.put("/tarefas/:id", async (req, res) => {
   const { id } = req.params;
   const { titulo, descricao, prazo, completed } = req.body;
@@ -68,7 +67,7 @@ app.put("/tarefas/:id", async (req, res) => {
   }
 });
 
-// Deletar
+// delete
 app.delete("/delete/:id", async (req, res) => {
   const { id } = req.params;
   try {

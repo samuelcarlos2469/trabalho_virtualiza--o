@@ -1,7 +1,7 @@
 const tarefaForm = document.getElementById("tarefaForm");
 const tarefaList = document.getElementById("tarefaList");
 
-// Criação de tarefa
+// criação
 tarefaForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -19,7 +19,7 @@ tarefaForm.addEventListener("submit", async (event) => {
   });
 });
 
-// Atualizar tarefa
+// att
 tarefaList.addEventListener("change", (event) => {
   if (event.target.type === "checkbox" || event.target.type === "text") {
     const li = event.target.closest("li");
@@ -31,7 +31,7 @@ tarefaList.addEventListener("change", (event) => {
     const prazoElement = li.querySelector("#inputPrazo");
     const prazo = prazoElement ? prazoElement.value.trim() : "";
 
-    // Prepare the update data object
+    //usando isso aqui pra não ter problemas com o prazo vazio
     const updateData = {
       titulo,
       descricao,
@@ -54,7 +54,7 @@ tarefaList.addEventListener("change", (event) => {
   }
 });
 
-// Remover tarefa
+// deletar
 tarefaList.addEventListener("click", (event) => {
   if (
     event.target.tagName === "BUTTON" &&
