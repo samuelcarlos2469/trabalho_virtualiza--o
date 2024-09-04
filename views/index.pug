@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Lista de Tarefas
+    link(href="../public/output.css" rel="stylesheet")
+  body
+    .container
+      h1 Lista de Tarefas
+      form#tarefaForm
+        input#tarefaTitulo(type="text" placeholder="Nova tarefa")
+        textarea#descricao(placeholder="Insira a descrição da tarefa")
+        button#btnAddTarefa(type="submit") Adicionar
+      ul#tarefaList
+        each tarefa in lista 
+          li(data-id=tarefa.id)
+            form#editTarefa
+              input(type="text" value=tarefa.id id="tarefaID")
+              input(type="text" value=tarefa.titulo id="inputTitulo")
+              input(type="text" value=tarefa.descricao id="inputDescricao")
+              input(type="checkbox" checked=tarefa.completed id="completed")
+              label(for="completed") Tarefa completa
+              button(type="submit") Editar
+              button#buttonRemover Remover
+    script(src="controllers/script.js")

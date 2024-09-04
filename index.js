@@ -1,48 +1,36 @@
 const express = require("express");
+const path = require("path");
 const app = express();
-const Conexao = require("./bd");
+const Tarefa = require("./models/tarefa");
+const novaTarefa = new Tarefa();
 
+app.use(express.static(__dirname));
 app.use(express.json());
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
 
+app.get("/", async (req, res) => {
+  try {
+    const lista = await novaTarefa.getTodasTarefas();
+    res.render("index", { lista });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao buscar tarefas" });
+  }
+});
 //criação
 app.post("/tarefas", async (req, res) => {
   const { titulo, descricao } = req.body;
-  const conexao = new Conexao();
-  const result = await conexao.query(
-    "INSERT INTO tarefas (titulo, descricao) VALUES ($1, $2)",
-    [titulo, descricao]
-  );
-  res.json(result);
-});
-
-//lista completa
-app.get("/tarefas", async (req, res) => {
-  const conexao = new Conexao();
   try {
-    const { rows } = await conexao.query("SELECT * FROM tarefas");
-    res.json(rows);
-  } catch (err) {
-    console.error("Erro ao buscar tarefas:", err);
-    res.status(500).json({ error: "Erro ao buscar tarefas" });
-  }
-});
-
-//lista especifica
-app.get("/tarefas/:id", async (req, res) => {
-  const { id } = req.params;
-  const conexao = new Conexao();
-  try {
-    const { rows } = await conexao.query(
-      "SELECT * FROM tarefas WHERE id = $1",
-      [id]
+    const result = await novaTarefa.addTarefa(
+      titulo,
+      descricao,
+      (completed = false)
     );
-    if (rows.length === 0) {
-      return res.status(404).json({ error: "Tarefa não encontrada" });
-    }
-    res.json(rows[0]);
-  } catch (err) {
-    console.error("Erro ao buscar tarefa:", err);
-    res.status(500).json({ error: "Erro ao buscar tarefa" });
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao criar tarefa" });
   }
 });
 
@@ -50,59 +38,22 @@ app.get("/tarefas/:id", async (req, res) => {
 app.put("/tarefas/:id", async (req, res) => {
   const { id } = req.params;
   const { titulo, descricao, completed } = req.body;
-  const conexao = new Conexao();
+
   try {
-    const { rows } = await conexao.query(
-      "UPDATE tarefas SET titulo = $1, descricao = $2, completed = $3 WHERE id = $4 RETURNING *",
-      [titulo, descricao, completed, id]
-    );
-    if (rows.length === 0) {
-      return res.status(404).json({ error: "Tarefa não encontrada" });
-    }
-    res.json(rows[0]);
-  } catch (err) {
-    console.error("Erro ao atualizar tarefa:", err);
-    res.status(500).json({ error: "Erro ao atualizar tarefa" });
+    await novaTarefa.atualizarTarefa(titulo, descricao, completed, id);
+    res.status(200).json({ message: "Tarefa atualizada com sucesso" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao atualizar tarefa" });
   }
 });
 
 //deletar
-app.delete("/tarefas/:id", async (req, res) => {
+app.delete("/delete/:id", async (req, res) => {
   const { id } = req.params;
-  const conexao = new Conexao();
-  try {
-    await conexao.query("DELETE FROM tarefas WHERE id = $1 ", [id]);
-    res.json({ message: "Tarefa deletada com sucesso" });
-  } catch (err) {
-    console.error("Erro ao deletar tarefa:", err);
-    res.status(500).json({ error: "Erro ao deletar tarefa" });
-  }
+  novaTarefa.deletarTarefa(id);
 });
 
 app.listen(8080, () => {
   console.log("Servidor rodando na porta 8080");
-});
-
-app.put("/tarefas/:id", async (req, res) => {
-  const { id } = req.params;
-  const { titulo, descricao, completed } = req.body;
-
-  if (!titulo || typeof completed !== "boolean") {
-    return res.status(400).json({ error: "Dados inválidos" });
-  }
-
-  const conexao = new Conexao();
-  try {
-    const { rows } = await conexao.query(
-      "UPDATE tarefas SET titulo = $1, descricao = $2, completed = $3 WHERE id = $4 RETURNING *",
-      [titulo, descricao, completed, id]
-    );
-    if (rows.length === 0) {
-      return res.status(404).json({ error: "Tarefa não encontrada" });
-    }
-    res.json(rows[0]);
-  } catch (err) {
-    console.error("Erro ao atualizar tarefa:", err);
-    res.status(500).json({ error: "Erro interno do servidor" });
-  }
 });
