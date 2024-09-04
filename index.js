@@ -4,6 +4,14 @@ const app = express();
 const Tarefa = require("./models/tarefa");
 const novaTarefa = new Tarefa();
 
+function formatarData(data) {
+  const d = new Date(data);
+  const dia = String(d.getDate()).padStart(2, "0");
+  const mes = String(d.getMonth() + 1).padStart(2, "0");
+  const ano = d.getFullYear();
+  return `${dia}/${mes}/${ano}`;
+}
+
 app.use(express.static(__dirname));
 app.use(express.json());
 app.set("views", path.join(__dirname, "views"));
@@ -12,35 +20,47 @@ app.set("view engine", "pug");
 app.get("/", async (req, res) => {
   try {
     const lista = await novaTarefa.getTodasTarefas();
-    res.render("index", { lista });
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0); // Reseta horas, minutos, segundos e milissegundos
+
+    const listaFormatada = lista.map((tarefa) => {
+      const prazo = tarefa.prazo ? new Date(tarefa.prazo) : null;
+      const dataFormatada = prazo ? formatarData(prazo) : "Indefinido";
+      const atrasada = prazo && prazo < hoje ? "Tarefa atrasada" : "";
+
+      return {
+        ...tarefa,
+        prazo: dataFormatada,
+        atrasada,
+      };
+    });
+
+    res.render("index", { lista: listaFormatada });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Erro ao buscar tarefas" });
   }
 });
-//criação
+
+// Criação
 app.post("/tarefas", async (req, res) => {
-  const { titulo, descricao } = req.body;
+  const { titulo, descricao, prazo } = req.body;
   try {
-    const result = await novaTarefa.addTarefa(
-      titulo,
-      descricao,
-      (completed = false)
-    );
-    res.status(201).json(result);
+    await novaTarefa.addTarefa(titulo, descricao, prazo, false);
+    res.status(201).json({ message: "Tarefa criada com sucesso" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Erro ao criar tarefa" });
   }
 });
 
-//atualizar
+// Atualizar
 app.put("/tarefas/:id", async (req, res) => {
   const { id } = req.params;
-  const { titulo, descricao, completed } = req.body;
+  const { titulo, descricao, prazo, completed } = req.body;
 
   try {
-    await novaTarefa.atualizarTarefa(titulo, descricao, completed, id);
+    await novaTarefa.atualizarTarefa(titulo, descricao, prazo, completed, id);
     res.status(200).json({ message: "Tarefa atualizada com sucesso" });
   } catch (error) {
     console.error(error);
@@ -48,10 +68,16 @@ app.put("/tarefas/:id", async (req, res) => {
   }
 });
 
-//deletar
+// Deletar
 app.delete("/delete/:id", async (req, res) => {
   const { id } = req.params;
-  novaTarefa.deletarTarefa(id);
+  try {
+    await novaTarefa.deletarTarefa(id);
+    res.status(200).json({ message: "Tarefa deletada com sucesso" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao deletar tarefa" });
+  }
 });
 
 app.listen(8080, () => {

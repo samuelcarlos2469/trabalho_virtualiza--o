@@ -4,23 +4,31 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title Lista de Tarefas
-    link(href="../public/output.css" rel="stylesheet")
+    link(href="../public/styles.css" rel="stylesheet")
   body
     .container
       h1 Lista de Tarefas
       form#tarefaForm
-        input#tarefaTitulo(type="text" placeholder="Nova tarefa")
+        .form-row
+          input#tarefaTitulo(type="text" placeholder="Nova tarefa")
+          input#prazo(type="date" placeholder="Prazo da tarefa")
+          button#btnAddTarefa(type="submit") Adicionar
         textarea#descricao(placeholder="Insira a descrição da tarefa")
-        button#btnAddTarefa(type="submit") Adicionar
       ul#tarefaList
         each tarefa in lista 
-          li(data-id=tarefa.id)
+          li(data-id=tarefa.id class=(tarefa.atrasada ? 'atrasada' : ''))
             form#editTarefa
-              input(type="text" value=tarefa.id id="tarefaID")
-              input(type="text" value=tarefa.titulo id="inputTitulo")
-              input(type="text" value=tarefa.descricao id="inputDescricao")
-              input(type="checkbox" checked=tarefa.completed id="completed")
-              label(for="completed") Tarefa completa
-              button(type="submit") Editar
-              button#buttonRemover Remover
+              .input-container
+                input(type="text" value=tarefa.id id="tarefaID")
+                input(type="text" value=tarefa.titulo id="inputTitulo")
+              textarea#inputDescricao(value=tarefa.descricao) #{tarefa.descricao}
+              .prazo
+                | Prazo: #{tarefa.prazo}
+              .actions
+                div.checkdiv 
+                  input(type="checkbox" checked=tarefa.completed id="completed")
+                  label(for="completed") Completa
+                if tarefa.atrasada
+                  span.text-atrasado Atrasada
+                button#buttonRemover.btn-remove Remover
     script(src="controllers/script.js")

@@ -1,0 +1,165 @@
+.container {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #eff7fb;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#tarefaForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+    background-color: #dbedf7; /* Azul claro para diferenciar o formulário */
+    padding: 10px 20px; /* Adiciona algum espaçamento interno */
+    border-radius: 5px; /* Adiciona bordas arredondadas */
+}
+
+.form-row {
+    display: flex;
+    gap: 10px; /* Espaço entre o input e o botão */
+}
+
+#tarefaTitulo {
+    flex-grow: 1; /* Faz com que o input ocupe todo o espaço horizontal disponível */
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#btnAddTarefa {
+    padding: 8px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center; /* Alinha o botão verticalmente */
+}
+
+#btnAddTarefa:hover {
+    background-color: #0056b3;
+}
+
+#descricao {
+    width: 100%;
+    padding: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    resize: vertical;
+}
+
+#prazo{
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.input-container {
+    display: flex;
+    margin-bottom: 10px; /* Espaço abaixo do container */
+}
+
+#inputTitulo, #tarefaID {
+    font-weight: bold; /* Texto em negrito */
+    text-decoration: underline; /* Texto sublinhado */
+    background-color: transparent; /* Fundo transparente para que o fundo do card pai seja visível */
+    border: none; /* Adiciona borda para os inputs */
+}
+
+#inputTitulo {
+    flex-grow: 1; /* Faz com que o input ocupe todo o espaço disponível */
+    padding: 8px;
+    border-radius: 5px;
+}
+
+#tarefaID {
+    width: 30px; /* Ajuste para ocupar 25% a menos */
+    font-size: 1rem;
+    text-align: left;
+    border-radius: 5px;
+    flex-shrink: 0;
+    font-size: 1rem; /* Ajusta o tamanho da fonte se necessário */
+}
+
+
+#inputDescricao {
+    min-height: 90px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+    margin-bottom: 5px;
+}
+
+#tarefaList {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espaço entre os cards */
+}
+
+#tarefaList li {
+    background-color: #fcfcef; /* Cor amarela sutil padrão */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    width: calc(50% - 10px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px; /* Adiciona espaço vertical entre as linhas de tarefas */
+    min-height: 150px; /* Garante que todos os cartões tenham a mesma altura mínima */
+}
+
+.prazo{
+    text-align: left;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+.atrasada {
+    background-color: #ffd8db !important; /* Cor de fundo vermelho claro */
+    border: 1px solid #f5c6cb !important; /* Borda vermelha clara */
+}
+
+.text-atrasado {
+    color: #ec5b13; /* Cor do texto vermelho escuro */
+    font-weight: bold; /* Texto em negrito */
+    margin-left: 5px; /* Espaço entre o checkbox e o texto */
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#completed {
+    margin-right: 5px;
+}
+
+#buttonRemover {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#buttonRemover:hover {
+    background-color: #c82333;
+}
+
+.checkdiv{
+    display: flex;
+    align-items: center;
+}
