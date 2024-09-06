@@ -1,13 +1,13 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 class Conexao {
   constructor() {
     this.banco = new Pool({
-      user: 'user',
-      host: 'postgres://user:password@db:8081/mydb',
-      database: 'mydb',
-      password: '1234',
-      port: 5432, 
+      user: "user",
+      host: "db",
+      database: "mydb",
+      password: "1234",
+      port: 5432,
     });
   }
 

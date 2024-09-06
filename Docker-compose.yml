@@ -17,7 +17,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DATABASE_URL: postgres://user:password@db:5432/mydb
+      DATABASE_URL: postgres://user:1234@db:5432/mydb
     depends_on:
       - db
     networks:
