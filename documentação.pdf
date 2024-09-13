@@ -1,0 +1,31 @@
+A aplicação é uma lista de tarefas simples onde os usuários podem criar, atualizar, deletar e visualizar tarefas, que possuem um título, descrição e prazo opcional
+e caso a tarefa esteja atrasada, ela será destacada visualmente para melhorar a usabilidade.
+Foi construída com Node.js e Express.js no backend, utilizando Pug para renderização dinâmica do front-end. O banco de dados utilizado é o PostgreSQL.
+Foi estruturada da seguinte forma:
+    -Backend: Desenvolvido em Node.js com Express.js para gerenciar as rotas da API (GET, POST, PUT, DELETE). O que ocorre nos arquivos:
+        index.js e script.js: para controle das rotas do servidor Express.js e suas operações de CRUD para tarefas.
+        bd.js: para gerenciar a conexão com o banco de dados PostgreSQL.
+
+    -Banco de Dados: PostgreSQL, em uma tabela chamada tarefas. Determinada em uma única tabela Tarefas no arquivo bd.sql que contém:
+        tabelas para um id, titulo obrigatório, descrição e prazo opcionais, além de um booleano para o status
+        
+    -Front-end: Dinâmico, usando Pug renderizar a interface.
+
+    -Docker: A aplicação é containerizada com Docker, separando o banco de dados e o backend. O que está configurado nos arquivos:
+        Dockerfile: para definir a imagem do container Node.js.
+
+        docker-compose.yml: organiza os containers do backend e do banco de dados PostgreSQL. Sendo que nele está definido o uso dos serviços:
+            container do PostgreSQL usando a imagem postgres:latest, expondo a porta padrão 5432 para o acesso, além disso 
+            também monta um diretório ./bd para inicializar o banco com o arquivo SQL no comando:
+                ./bd:/docker-entrypoint-initdb.d
+
+            container Node.js que executa a aplicação usando a porta padrão 8080, que precisa ser conectada ao banco de dados para inicialização,
+            o que acontece a partir da env_variable DATABASE_URL, no formato padrão postgres://user:senha@host:porta/banco além de denotar que
+            o container da aplicação só será iniciado após o container do banco de dados estar rodando na linha com o comando:
+                depends_on:
+                    - db
+
+Para sua utilização tem-se o comando:
+    docker-compose up
+E assim tem-se disponível o acesso a aplicação usando:
+    http://localhost:8080
